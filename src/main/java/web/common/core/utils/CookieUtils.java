@@ -32,7 +32,9 @@ public class CookieUtils {
             c.setMaxAge(maxAge);
             c.setHttpOnly(true);
             c.setSecure(secure);
-            c.setDomain(CONTEXT_DOMAIN);
+            if (CONTEXT_DOMAIN != null && !CONTEXT_DOMAIN.isBlank()) {
+                c.setDomain(CONTEXT_DOMAIN);
+            }
             res.addCookie(c);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -47,7 +49,9 @@ public class CookieUtils {
         c.setPath("/");
         c.setMaxAge(0);
         c.setHttpOnly(true);
-        c.setDomain(CONTEXT_DOMAIN);
+        if (CONTEXT_DOMAIN != null && !CONTEXT_DOMAIN.isBlank()) {
+            c.setDomain(CONTEXT_DOMAIN);
+        }
         res.addCookie(c);
     }
 }
