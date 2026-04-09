@@ -25,6 +25,7 @@ public enum Code {
     FORBIDDEN(4030000, HttpStatus.FORBIDDEN, "Forbidden"),
     NOT_FOUND(4040000, HttpStatus.NOT_FOUND, "Not found"),
     CONFLICT(4090000, HttpStatus.CONFLICT, "Conflict"),
+    BAD_GATEWAY(5020000, HttpStatus.BAD_GATEWAY, "Bad gateway"),
     INTERNAL_SERVER_ERROR(5000000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
 
     //01 Server Config
