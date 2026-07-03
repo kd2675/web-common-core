@@ -52,6 +52,40 @@ class SimulationClockSnapshotsTest {
     }
 
     @Test
+    void calculate_retrogradeWallClock_freezesAtLastHeartbeat() {
+        LocalDateTime lastStartedAt = LocalDateTime.of(2026, 7, 1, 10, 0);
+        LocalDateTime lastHeartbeatAt = LocalDateTime.of(2026, 7, 1, 10, 1);
+
+        SimulationClockSnapshot snapshot = SimulationClockSnapshots.calculate(
+                LocalDate.of(2026, 7, 1),
+                7200,
+                0,
+                true,
+                lastStartedAt,
+                lastHeartbeatAt,
+                30,
+                LocalDateTime.of(2026, 7, 1, 9, 59)
+        );
+
+        assertThat(snapshot.stale()).isFalse();
+        assertThat(snapshot.realDateTime()).isEqualTo(lastHeartbeatAt);
+        assertThat(snapshot.accumulatedRealSeconds()).isEqualTo(60);
+    }
+
+    @Test
+    void effectiveRealDateTime_retrogradeWallClock_returnsLastHeartbeat() {
+        LocalDateTime lastHeartbeatAt = LocalDateTime.of(2026, 7, 1, 10, 1);
+
+        LocalDateTime effective = SimulationClockSnapshots.effectiveRealDateTime(
+                lastHeartbeatAt,
+                30,
+                LocalDateTime.of(2026, 7, 1, 9, 59)
+        );
+
+        assertThat(effective).isEqualTo(lastHeartbeatAt);
+    }
+
+    @Test
     void calculate_truncatesRealClockBoundariesToSecond() {
         LocalDateTime now = LocalDateTime.of(2026, 7, 1, 20, 11, 2, 123_456_789);
 

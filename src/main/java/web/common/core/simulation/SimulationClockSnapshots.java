@@ -29,8 +29,12 @@ public final class SimulationClockSnapshots {
         boolean stale = false;
         LocalDateTime realDateTime = heartbeatAt == null ? current : heartbeatAt;
         if (running && startedAt != null && heartbeatAt != null) {
-            stale = isStale(heartbeatAt, current, staleAfterSeconds);
-            realDateTime = stale ? heartbeatAt : current;
+            if (current.isBefore(heartbeatAt)) {
+                realDateTime = heartbeatAt;
+            } else {
+                stale = isStale(heartbeatAt, current, staleAfterSeconds);
+                realDateTime = stale ? heartbeatAt : current;
+            }
             elapsedSeconds += Math.max(0, Duration.between(startedAt, realDateTime).toSeconds());
         }
 
@@ -64,6 +68,9 @@ public final class SimulationClockSnapshots {
         LocalDateTime heartbeatAt = truncateToSecond(lastHeartbeatAt);
         if (heartbeatAt == null) {
             return current;
+        }
+        if (current.isBefore(heartbeatAt)) {
+            return heartbeatAt;
         }
         return isStale(heartbeatAt, current, staleAfterSeconds) ? heartbeatAt : current;
     }
